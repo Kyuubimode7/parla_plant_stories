@@ -61,7 +61,7 @@ function Lightbox({ src, alt, onClose }) {
 
 function TreePopup({ p }) {
   const [lightbox, setLightbox] = useState(null)
-  const imgSrc = p.photo ? `/tree_image/${p.photo}` : null
+  const imgSrc = p.photo ? `${import.meta.env.BASE_URL}tree_image/${p.photo}` : null
 
   return (
     <>
@@ -102,7 +102,7 @@ export default function App() {
   const [opacity, setOpacity] = useState(1)
 
   useEffect(() => {
-    fetch('/survey.geojson')
+    fetch(`${import.meta.env.BASE_URL}survey.geojson`)
       .then((r) => r.json())
       .then((data) => setFeatures(data.features))
   }, [])
