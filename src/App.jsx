@@ -1,8 +1,9 @@
 import 'leaflet/dist/leaflet.css'
 import './App.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { MapContainer, TileLayer, LayersControl, Circle, CircleMarker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, LayersControl, Circle, CircleMarker, Popup, useMap } from 'react-leaflet'
+import L from 'leaflet'
 
 const CENTER = [19.099639, 72.847222]
 
@@ -18,6 +19,30 @@ const POINT_STYLE = {
   fillColor: '#40916c',
   fillOpacity: 0.8,
   weight: 1.5,
+}
+
+function OpacitySlider({ opacity, onChange }) {
+  const ref = useRef(null)
+  useEffect(() => {
+    if (ref.current) L.DomEvent.disableClickPropagation(ref.current)
+  }, [])
+
+  return (
+    <div ref={ref} className="opacity-control leaflet-bar">
+      <span className="opacity-label">Opacity</span>
+      <input
+        type="range"
+        min={0}
+        max={1}
+        step={0.01}
+        value={opacity}
+        onChange={(e) => onChange(parseFloat(e.target.value))}
+        className="opacity-slider"
+        orient="vertical"
+      />
+      <span className="opacity-value">{Math.round(opacity * 100)}%</span>
+    </div>
+  )
 }
 
 function val(v) {
@@ -74,6 +99,7 @@ function TreePopup({ p }) {
 
 export default function App() {
   const [features, setFeatures] = useState([])
+  const [opacity, setOpacity] = useState(1)
 
   useEffect(() => {
     fetch('/survey.geojson')
@@ -90,6 +116,7 @@ export default function App() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             maxZoom={25}
             maxNativeZoom={19}
+            opacity={opacity}
           />
         </LayersControl.BaseLayer>
         <LayersControl.BaseLayer name="Satellite">
@@ -98,9 +125,12 @@ export default function App() {
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             maxZoom={25}
             maxNativeZoom={19}
+            opacity={opacity}
           />
         </LayersControl.BaseLayer>
       </LayersControl>
+
+      <OpacitySlider opacity={opacity} onChange={setOpacity} />
 
       {features.map((feature) => {
         const p = feature.properties

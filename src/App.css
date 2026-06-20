@@ -1,3 +1,43 @@
+.opacity-control {
+  position: absolute;
+  top: 80px;
+  right: 10px;
+  z-index: 1000;
+  background: white;
+  border-radius: 4px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+  user-select: none;
+}
+
+.opacity-label {
+  font-size: 10px;
+  color: #555;
+  writing-mode: horizontal-tb;
+  font-family: system-ui, sans-serif;
+}
+
+.opacity-value {
+  font-size: 10px;
+  color: #333;
+  font-family: system-ui, sans-serif;
+}
+
+.opacity-slider {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  appearance: slider-vertical;
+  -webkit-appearance: slider-vertical;
+  width: 8px;
+  height: 100px;
+  cursor: pointer;
+  accent-color: #2d6a4f;
+}
+
 .tree-popup {
   font-family: system-ui, sans-serif;
   font-size: 13px;
